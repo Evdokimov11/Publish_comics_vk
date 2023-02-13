@@ -4,6 +4,8 @@ import random
 
 from dotenv import load_dotenv
 
+VK_API_VERSION = 5.131
+
 
 
 def get_rand_comics():
@@ -39,7 +41,7 @@ def get_upload_url(vk_headers,vk_group_id):
         url_request = 'https://api.vk.com/method/photos.getWallUploadServer'
         params = {
                     'group_id': vk_group_id,
-                    'v': 5.131
+                    'v': VK_API_VERSION
                     }
   
         response = requests.post(url_request,params=params,headers=vk_headers)
@@ -70,7 +72,7 @@ def save_photo(vk_headers,upload_photo_response,vk_group_id):
   
     vk_params_save = {
             'group_id': vk_group_id,
-            'v': 5.131,
+            'v': VK_API_VERSION,
             'photo':upload_photo_response['photo'],
             'hash':upload_photo_response['hash'],
             'server':upload_photo_response['server']
@@ -85,7 +87,7 @@ def save_photo(vk_headers,upload_photo_response,vk_group_id):
     return person_id, photo_id
 
 
-def publish_photo(vk_headers,person_id,photo_id,vk_group_id):
+def publish_photo(vk_headers,person_id,photo_id,vk_group_id, comics_comment):
 
     publish_url = 'https://api.vk.com/method/wall.post'
     publish_params = {
@@ -93,7 +95,7 @@ def publish_photo(vk_headers,person_id,photo_id,vk_group_id):
                 'from_group': 1,
                 'message':comics_comment,
                 'attachments':f'photo{person_id}_{photo_id}',
-                'v': 5.131
+                'v': VK_API_VERSION
                 }
   
     response_publish = requests.post(publish_url, params=publish_params,  headers=vk_headers)
@@ -113,7 +115,7 @@ if __name__ == '__main__':
     upload_photo_url = get_upload_url(vk_headers,vk_group_id)
     upload_photo_response = upload_photo(vk_headers, upload_photo_url)
     person_id, photo_id =  save_photo(vk_headers,upload_photo_response,vk_group_id)
-    publish_photo(vk_headers,person_id,photo_id,vk_group_id)
+    publish_photo(vk_headers,person_id,photo_id,vk_group_id,comics_comment)
   
     os.remove('comics.png')
   
