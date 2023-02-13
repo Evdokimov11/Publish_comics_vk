@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 VK_API_VERSION = 5.131
 
 
-
 def get_rand_comics():
 
     url_last_comics = "https://xkcd.com/info.0.json"
