@@ -6,6 +6,21 @@ from dotenv import load_dotenv
 
 VK_API_VERSION = 5.131
 
+def check_status(formatted_response):
+  
+    try :
+      error_msg = formatted_response['error']['error_msg']
+      error_code = formatted_response['error']['error_code']
+      full_error_msg = f'Code error : {error_code}. {error_msg}'
+
+      return True, full_error_msg
+      
+      exit(full_error_msg)
+      
+    except KeyError:
+      
+      return False, 'Ok'
+
 
 def get_rand_comics():
 
@@ -42,12 +57,18 @@ def get_upload_url(vk_headers, vk_group_id):
       'group_id': vk_group_id,
       'v': VK_API_VERSION,
     }
-
+    
     response = requests.post(request_url, params=params, headers=vk_headers)
-    response.raise_for_status()
+    response.raise_for_status()     
     formatted_response = response.json()
-
-    return formatted_response['response']['upload_url']
+    
+    error_key, error_message = check_status(formatted_response)
+    if error_key : 
+      exit(error_message)
+    
+    upload_photo_url = formatted_response['response']['upload_url']
+       
+    return upload_photo_url
 
 
 def upload_photo(vk_headers, upload_photo_url):
@@ -63,7 +84,10 @@ def upload_photo(vk_headers, upload_photo_url):
 
         upload_photo_response.raise_for_status()
         upload_photo_formatted_response = upload_photo_response.json()
-
+        error_key, error_message = check_status(upload_photo_formatted_response)
+        if error_key : 
+          exit(error_message)
+        
     return upload_photo_formatted_response
 
 
@@ -86,6 +110,10 @@ def save_photo(vk_headers, upload_photo_response, vk_group_id):
     )
     save_vk_response.raise_for_status()
     save_formatted_vk_response = save_vk_response.json()
+    
+    error_key, error_message = check_status(save_formatted_vk_response)
+    if error_key : 
+      exit(error_message)
 
     person_id = save_formatted_vk_response['response'][0]['owner_id']
     photo_id = save_formatted_vk_response['response'][0]['id']
