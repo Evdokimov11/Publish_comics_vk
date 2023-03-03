@@ -91,16 +91,17 @@ def upload_photo(vk_headers, upload_photo_url):
     return upload_photo_formatted_response
 
 
-def save_photo(vk_headers, upload_photo_response, vk_group_id):
+def save_photo(vk_headers, upload_photo, upload_hash, 
+               upload_server, vk_group_id):
 
     saved_request_url = 'https://api.vk.com/method/photos.saveWallPhoto'
 
     save_vk_params = {
       'group_id': vk_group_id,
       'v': VK_API_VERSION,
-      'photo': upload_photo_response['photo'],
-      'hash': upload_photo_response['hash'],
-      'server': upload_photo_response['server'],
+      'photo': upload_photo,
+      'hash': upload_hash,
+      'server': upload_server,
     }
 
     save_vk_response = requests.post(
@@ -153,9 +154,14 @@ if __name__ == '__main__':
     comics_comment = get_rand_comics()
     upload_photo_url = get_upload_url(vk_headers, vk_group_id)
     upload_photo_response = upload_photo(vk_headers, upload_photo_url)
+    upload_photo = upload_photo_response['photo'],
+    upload_hash = upload_photo_response['hash'],
+    upload_server = upload_photo_response['server'],
     person_id, photo_id = save_photo(
         vk_headers,
-        upload_photo_response,
+        upload_photo,
+        upload_hash,
+        upload_server,
         vk_group_id,
         )
     publish_photo(vk_headers, person_id, photo_id, vk_group_id, comics_comment)
