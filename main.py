@@ -105,8 +105,8 @@ if __name__ == '__main__':
 
     load_dotenv()
   
-    vk_access_token = os.environ['vk_access_token']
-    vk_group_id = os.environ['vk_group_id']
+    vk_access_token = os.environ['VK_ACCESS_TOKEN']
+    vk_group_id = os.environ['VK_GROUP_ID']
   
     vk_headers = {'Authorization': 'Bearer {}'.format(vk_access_token)}
   
