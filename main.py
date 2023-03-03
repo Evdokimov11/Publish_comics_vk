@@ -82,11 +82,11 @@ def upload_photo(vk_headers, upload_photo_url):
           headers=vk_headers,
         )
 
-        upload_photo_response.raise_for_status()
-        upload_photo_formatted_response = upload_photo_response.json()
-        error_key, error_message = check_status(upload_photo_formatted_response)
-        if error_key : 
-          exit(error_message)
+    upload_photo_response.raise_for_status()
+    upload_photo_formatted_response = upload_photo_response.json()
+    error_key, error_message = check_status(upload_photo_formatted_response)
+    if error_key : 
+      exit(error_message)
         
     return upload_photo_formatted_response
 
