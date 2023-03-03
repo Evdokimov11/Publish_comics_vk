@@ -152,18 +152,22 @@ if __name__ == '__main__':
     vk_headers = {'Authorization': 'Bearer {}'.format(vk_access_token)}
 
     comics_comment = get_rand_comics()
-    upload_photo_url = get_upload_url(vk_headers, vk_group_id)
-    upload_photo_response = upload_photo(vk_headers, upload_photo_url)
-    upload_photo = upload_photo_response['photo'],
-    upload_hash = upload_photo_response['hash'],
-    upload_server = upload_photo_response['server'],
-    person_id, photo_id = save_photo(
-        vk_headers,
-        upload_photo,
-        upload_hash,
-        upload_server,
-        vk_group_id,
-        )
-    publish_photo(vk_headers, person_id, photo_id, vk_group_id, comics_comment)
-
-    os.remove('comics.png')
+    try:
+      
+        upload_photo_url = get_upload_url(vk_headers, vk_group_id)
+        upload_photo_response = upload_photo(vk_headers, upload_photo_url)
+        upload_photo = upload_photo_response['photo'],
+        upload_hash = upload_photo_response['hash'],
+        upload_server = upload_photo_response['server'],
+        person_id, photo_id = save_photo(
+            vk_headers,
+            upload_photo,
+            upload_hash,
+            upload_server,
+            vk_group_id,
+            )
+        publish_photo(vk_headers, person_id, photo_id, vk_group_id, comics_comment)
+      
+    finally:
+      
+        os.remove('comics.png')
