@@ -94,9 +94,9 @@ def upload_photo(vk_headers, upload_photo_url):
 def save_photo(vk_headers, upload_photo, upload_hash, 
                upload_server, vk_group_id):
 
-    saved_request_url = 'https://api.vk.com/method/photos.saveWallPhoto'
+    request_url = 'https://api.vk.com/method/photos.saveWallPhoto'
 
-    save_vk_params = {
+    vk_params = {
       'group_id': vk_group_id,
       'v': VK_API_VERSION,
       'photo': upload_photo,
@@ -104,20 +104,20 @@ def save_photo(vk_headers, upload_photo, upload_hash,
       'server': upload_server,
     }
 
-    save_vk_response = requests.post(
-      saved_request_url,
-      params=save_vk_params,
+    vk_response = requests.post(
+      request_url,
+      params=vk_params,
       headers=vk_headers,
     )
-    save_vk_response.raise_for_status()
-    save_formatted_vk_response = save_vk_response.json()
+    vk_response.raise_for_status()
+    formatted_vk_response = vk_response.json()
     
-    error_key, error_message = check_status(save_formatted_vk_response)
+    error_key, error_message = check_status(formatted_vk_response)
     if error_key : 
       exit(error_message)
 
-    person_id = save_formatted_vk_response['response'][0]['owner_id']
-    photo_id = save_formatted_vk_response['response'][0]['id']
+    person_id = formatted_vk_response['response'][0]['owner_id']
+    photo_id =  formatted_vk_response['response'][0]['id']
 
     return person_id, photo_id
 
