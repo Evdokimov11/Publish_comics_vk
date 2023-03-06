@@ -12,11 +12,9 @@ def check_status(formatted_response):
     error_msg = formatted_response['error']['error_msg']
     error_code = formatted_response['error']['error_code']
     full_error_msg = f'Code error : {error_code}. {error_msg}'
-  
+
     return full_error_msg
-      
-    
-       
+
 
 def get_rand_comics():
 
@@ -61,9 +59,8 @@ def get_upload_url(vk_headers, vk_group_id):
     if 'error' in formatted_response:
         error_message = check_status(formatted_response)
         raise Exception(error_message)
-        
+
     upload_photo_url = formatted_response['response']['upload_url']
-    
 
     return upload_photo_url
 
@@ -81,7 +78,6 @@ def upload_photo(vk_headers, upload_photo_url):
 
     upload_photo_response.raise_for_status()
     upload_photo_formatted_response = upload_photo_response.json()
-
 
     if 'error' in upload_photo_formatted_response:
         error_message = check_status(upload_photo_formatted_response)
@@ -114,7 +110,7 @@ def save_photo(vk_headers, upload_photo, upload_hash, upload_server,
     if 'error' in formatted_vk_response:
         error_message = check_status(formatted_vk_response)
         raise Exception(error_message)
-      
+
     person_id = formatted_vk_response['response'][0]['owner_id']
     photo_id = formatted_vk_response['response'][0]['id']
 
@@ -140,7 +136,7 @@ def publish_photo(vk_headers, person_id, photo_id, vk_group_id, comics_coment):
     )
     publish_response.raise_for_status()
     formatted_publish_response = publish_response.json()
-    
+
     if 'error' in formatted_publish_response:
         error_message = check_status(formatted_publish_response)
         raise Exception(error_message)
